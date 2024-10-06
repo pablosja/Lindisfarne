@@ -3,7 +3,6 @@ package pablosja.lindisfarne.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import pablosja.lindisfarne.models.User;
 import pablosja.lindisfarne.repositories.UserRepository;
 
