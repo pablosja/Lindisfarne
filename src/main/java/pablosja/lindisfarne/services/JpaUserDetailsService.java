@@ -22,7 +22,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
         return repository
             .findByUsername(username)
-            .map(SecurityUser::new) //Userdetails
+            .map(SecurityUser::new)
             .orElse(null);
 
     }

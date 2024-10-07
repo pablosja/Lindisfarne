@@ -16,9 +16,8 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public void saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // Encriptar la contraseña
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
-    // Puedes añadir más métodos aquí, como buscar usuarios, etc.
 }

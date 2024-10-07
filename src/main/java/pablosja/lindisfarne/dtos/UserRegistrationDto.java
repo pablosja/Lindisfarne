@@ -4,16 +4,13 @@ public class UserRegistrationDto {
     private String username;
     private String encryptedPassword;
 
-    // Constructor vacío
     public UserRegistrationDto() {}
 
-    // Constructor con parámetros
     public UserRegistrationDto(String username, String encryptedPassword) {
         this.username = username;
         this.encryptedPassword = encryptedPassword;
     }
 
-    // Getters y Setters
     public String getUsername() {
         return username;
     }
