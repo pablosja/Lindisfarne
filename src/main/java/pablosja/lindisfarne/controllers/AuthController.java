@@ -2,9 +2,8 @@ package pablosja.lindisfarne.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +17,6 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
         try {
@@ -31,15 +27,18 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    @GetMapping("/login")
+
+    public ResponseEntity<String> login() {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContext contextHolder = SecurityContextHolder.getContext();
+            Authentication auth = contextHolder.getAuthentication();
+
+            System.out.println("<------------- Usr Auth: " + auth.getName());
             return ResponseEntity.ok("Login exitoso");
         } catch (Exception e) {
             return ResponseEntity.status(401).body("Error en el inicio de sesión: " + e.getMessage());
+
+        
         }
-    }
-}
+    }}

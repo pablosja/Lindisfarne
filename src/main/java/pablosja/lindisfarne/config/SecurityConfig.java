@@ -20,6 +20,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
 
 import pablosja.lindisfarne.facades.encryptations.Base64Encoder;
+import pablosja.lindisfarne.services.JpaUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +32,14 @@ public class SecurityConfig {
 
     MyBasicAuthenticationEntryPoint myBasicAuthenticationEntryPoint;
 
+    JpaUserDetailsService jpaUserDetailsService;
+
+    public SecurityConfig(MyBasicAuthenticationEntryPoint myBasicAuthenticationEntryPoint,
+            JpaUserDetailsService jpaUserDetailsService) {
+        this.myBasicAuthenticationEntryPoint = myBasicAuthenticationEntryPoint;
+        this.jpaUserDetailsService = jpaUserDetailsService;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -39,15 +48,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
 
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-            .requestMatchers(HttpMethod.POST, endpoint + "/register").permitAll()
-            .requestMatchers(HttpMethod.POST, endpoint + "/login").permitAll()
-            .requestMatchers(HttpMethod.GET, endpoint + "/login").permitAll()
-            .requestMatchers(HttpMethod.GET, endpoint + "/register").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(HttpMethod.POST, endpoint + "/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, endpoint + "/login").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.GET, endpoint + "/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, endpoint + "/register").permitAll()
 
-            .anyRequest().authenticated())
-
+                        .anyRequest().authenticated())
+                .userDetailsService(jpaUserDetailsService)
                 .httpBasic(basic -> basic.authenticationEntryPoint(myBasicAuthenticationEntryPoint))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
@@ -79,10 +88,11 @@ public class SecurityConfig {
     Base64Encoder base64Encoder() {
         return new Base64Encoder();
     }
+
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = 
-            http.getSharedObject(AuthenticationManagerBuilder.class);
+        AuthenticationManagerBuilder authenticationManagerBuilder = http
+                .getSharedObject(AuthenticationManagerBuilder.class);
         return authenticationManagerBuilder.build();
     }
 }
