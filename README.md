@@ -44,5 +44,5 @@ Este repositorio contiene el back-end de Lindisfarne, una aplicación web intera
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/tu_usuario/lindisfarne.git
+   git clone https://github.com/pablosja/UltimaSalida-Back.git
    cd lindisfarne
