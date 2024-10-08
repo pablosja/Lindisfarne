@@ -1,4 +1,4 @@
-# UltimaSalida-Back
+# Única Salida-Back
 
 Este repositorio contiene el back-end de Lindisfarne, una aplicación web interactiva de misterio y aventura. Utiliza **Spring Boot** para la gestión del servidor y la lógica de negocio, junto con **JPA** para la interacción con la base de datos.
 
